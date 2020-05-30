@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+
+{% block content%}
+
+<h3>Crea un nuevo DataSet</h3>
+
+<table class="table">
+    <thead>
+
+        <tr>
+            <td>Nombre</td>
+            <td>Description</td>
+
+        </tr>
+    </thead>
+    <tbody>
+<tr>
+{% for data in dataset %}
+    <td> {{ data.Nombre}}</td>
+    <td> {{ data.Description}} </td> 
+
+</tr>
+
+    </tbody>
+</table>
+    
+
+
+{% endblock %}

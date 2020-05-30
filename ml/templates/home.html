@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h2>Homepage</h2>
+<div class="col-5">
+    <p>Welcome to eMeL Site, {% if user.is_authenticated%}
+        {{ user.username }} {% else %}visitor{% endif %}!</p>
+    <p>
+        <strong>Total users registered: {{count}}</strong>
+    </p>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class='col-6'>
+        <div class="card">
+            <div class="card-body">
+                <h2>Inicio de sesicón</h2>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <button class="btn btn-primary" type="submit">Iniciar sesión</button>
+                    <a class="btn btn-link ml-2" href="{% url 'password_reset' %}">¿Olvidaste la contraseña?</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
