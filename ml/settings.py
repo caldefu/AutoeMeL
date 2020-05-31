@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ml.core',
     'ml.dataset',
+    'braces',
     'bootstrap4',
     'fa',
     'crispy_forms',

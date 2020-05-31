@@ -18,12 +18,14 @@
         </tr>
     </thead>
     <tbody>
-<tr>
-{% for data in dataset %}
-    <td> {{ data.Nombre}}</td>
-    <td> {{ data.Description}} </td> 
 
+{% for dataset in object_list %}
+<tr>
+    <td> {{ dataset.name }}</td>
+    <td> {{ dataset.description }} </td> 
 </tr>
+{% endfor %}
+
 
     </tbody>
 </table>

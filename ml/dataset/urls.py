@@ -7,6 +7,6 @@ app_name = 'dataset'
 
 urlpatterns = [
     path("new/", views.CreateDataset.as_view(), name="create"),
-    path("list/", views.ListDataset.as_view(), name="list"),
+    path("list/", views.UserDataSets.as_view(), name="list"),
     
 ]
