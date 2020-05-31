@@ -18,8 +18,8 @@ class Dataset (models.Model):
     def __str__ (self):
         return self.name
 
-    def deslete(self, *args, **kwargs):
-        self:archivo.delete()
+    def delete(self, *args, **kwargs):
+        self.archivo.delete()
         super().delete(*args, **kwargs)
     
     def user_directory_path (instance, filename):

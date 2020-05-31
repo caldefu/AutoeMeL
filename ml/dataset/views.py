@@ -2,8 +2,9 @@ from django.urls import reverse_lazy
 from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DeleteView
 from .models import Dataset
+from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -23,7 +24,7 @@ class CreateDataset (LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
         
-class UserDataSets (LoginRequiredMixin, ListView):
+class UserDataset (LoginRequiredMixin, ListView):
     model = Dataset
     template_name='dataset/dataset_list.html'
     def get_queryset(self):
@@ -41,3 +42,13 @@ class UserDataSets (LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['dataset_user'] = self.dataset_user
         return context
+
+class DeleteDataset (LoginRequiredMixin, DeleteView):
+    model = Dataset
+    success_url = reverse_lazy ('dataset:list')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return  queryset.filter(user_id = self.request.user.id)
+
+
