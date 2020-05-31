@@ -8,7 +8,7 @@
 
 <h3>Crea un nuevo DataSet</h3>
 
-<form action="{% url 'dataset:create' %}" method="POST" id="datasetForm">
+<form action="{% url 'dataset:create' %}" method="POST" id="datasetForm" enctype="multipart/form-data">
     {% csrf_token %}
     {{form|crispy}}
     <input type="submit" class='btn btn-primary btn-large' value="Create">

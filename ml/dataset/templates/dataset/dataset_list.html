@@ -14,6 +14,7 @@
         <tr>
             <td>Nombre</td>
             <td>Description</td>
+            <td>Archivo</td>
 
         </tr>
     </thead>
@@ -23,6 +24,9 @@
 <tr>
     <td> {{ dataset.name }}</td>
     <td> {{ dataset.description }} </td> 
+    {% if dataset.archivo.url %}
+    <td>{{ dataset.archivo.url}}</td>
+    {% endif %}
 </tr>
 {% endfor %}
 
