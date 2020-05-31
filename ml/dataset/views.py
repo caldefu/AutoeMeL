@@ -4,7 +4,6 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, ListView
 from .models import Dataset
-from .forms import DatasetForm
 from django.http import Http404
 from django.contrib.auth import get_user_model
 User = get_user_model()

@@ -25,7 +25,9 @@
     <td> {{ dataset.name }}</td>
     <td> {{ dataset.description }} </td> 
     {% if dataset.archivo.url %}
-    <td>{{ dataset.archivo.url}}</td>
+    <td>
+        <button type="button" class='btn btn-primary'><a href="{{dataset.archivo.url}}"></a>Descargar</button>
+    </td>
     {% endif %}
 </tr>
 {% endfor %}
