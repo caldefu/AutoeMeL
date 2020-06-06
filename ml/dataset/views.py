@@ -7,9 +7,8 @@ from .models import Dataset
 from django.shortcuts import get_object_or_404, render
 from django.http import Http404
 from django.contrib.auth import get_user_model
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
+from .tree import *
+
 User = get_user_model()
 
 
@@ -67,27 +66,40 @@ def detail(request, pk):
 
     else:
         return render(request,'dataset/dataset_detail.html',{'valid':'novalido'})
-
+    col_eliminada=""
     #Eliminacion de las columna índice
     for columna in df.columns.tolist():
         if columna in('ID','Id','id','iD','PK','Pk','Pk', 'pk'):
             df=df.drop([columna], axis=1)
             col_eliminada=columna
 
-    atributos=df.columns.tolist()[:-1]
+    variables=df.columns.tolist()
+    X=variables[0:-1]
+    Y=variables[-1]
     nfilas=df.shape[0]
     ncolumnas=df.shape[1]
     filamedia=(int)(nfilas/2)
     data=df.iloc[np.r_[0:5,filamedia:(filamedia+5),-5:0]].to_html
+    imagen_correlations(df)
+    for col in variables:
+        histrograma(df[col],col, (int)(nfilas/10))
+    histrograma(df[Y],Y, (int)(nfilas/10), 3, 3)
+
+
+    score=best_decision_tree(df,X,Y)
+
+
     ctx={'data':data,
         'description':dataset.description,
         'nombre':dataset.name,
         'size':file.size,
         'download':dataset.archivo,
-        'atributos':atributos,
+        'atributos':X,
+        'var_objetivo':Y,
         'rows':nfilas,
         'columns':ncolumnas,
-        'col_eliminada':col_eliminada}
-        
-
+        'col_eliminada':col_eliminada,
+        }
     return render(request,'dataset/dataset_detail.html',ctx)
+
+

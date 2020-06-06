@@ -1,37 +1,70 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% load crispy_forms_tags %}
-
-
-
-{% block content%}
-
+{% block content %}
 {% if valid %}
-<p> Ha sido imposible procesar su archivo.</p>
+<h2>Ha sido imposible procesar su archivo.</h2>
 {% else %}
 <div class="container">
-<h3>Detalles del Dataset: {{ nombre }}</h3>
-<div class=row>
+  <h3>Detalles del Dataset: {{ nombre }}</h3>
+  <div class="row">
     <b class="col-md-2">Descripción:</b>
     <p class="col-md-10">{{description}}</p>
+  </div>
+
+  <p><b>Tamaño del fichero: </b><span>{{ size }} bytes</span></p>
+  {% if col_eliminada %}
+  <p>
+    Se ha considerado la columna <b>{{ col_eliminada }}</b> como indice de la
+    tabla y ha sido eliminada.
+  </p>
+  {% endif %}
+  <p><b>Numero de filas: </b><span>{{ rows }}.</span></p>
+  <p><b>Numero de columnas: </b><span>{{ columns }}.</span></p>
+
+  <p><b>Datos representativos:</b></p>
+  {{data|safe}}
+<br>
+  <b>Atributos:</b>
+
+  <table>
+    <tr style="background-color: lightsteelblue;">
+      {% for atr in atributos %}
+      <th style="border-style:inset;">{{atr}}</th>
+      
+        {% endfor %}
+    </tr>
+
+    <tr>
+      {% for atr in atributos %}
+      <td style="border-style: groove;">
+        <img
+          src="{% static 'cache/hist'|add:atr|add:'.png' %}"
+          alt=""/>
+      </td>
+      {% endfor %}
+    </tr>
+  </table>
+  <br>
+  <b>Variable objetivo:</b>
+  <table>
+    <tr style="background-color: lightsteelblue;">
+      <th style="border-style:inset;">{{var_objetivo}}</th>
+    </tr>
+
+    <tr>
+      <td style="border-style: groove;">
+        <img
+          src="{% static 'cache/hist'|add:var_objetivo|add:'.png' %}"
+          alt=""/>
+      </td>
+    </tr>
+  </table>
+<br>
+
+  <p><b>Correlaciones:</b></p>
+  <img src="{% static 'cache/corr.png' %}" alt="" style="width:80%;" />
 </div>
-<p><b>Tamaño del fichero: </b><span>{{ size }} bytes</span></p>
-{% if col_eliminada %}
-<p>Se ha considerado la columna <b>{{ col_eliminada }}</b> como indice de la tabla y ha sido eliminada.</p>
 {% endif %}
-<p><b>Numero de filas: </b><span>{{ rows }}.</span></p>
-<p><b>Numero de columnas: </b><span>{{ columns }}.</span></p>
 
-<p><b>Datos representativos:</b></p>
-{{data|safe}}}
-
-{% for atr in atributos %}
-<p>{{atr}}</p>
-{% endfor %}
-{{atributos}}
-
-
-</div>
-
-{% endif %}
 {% endblock %}

@@ -10,7 +10,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}eMeL{% endblock %}</title>
+  <title>{% block title %}AutoeMeL{% endblock %}</title>
 </head>
 
 <body>
@@ -18,7 +18,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
     <div class="container">
       <a class="navbar-brand" href="{% url 'home' %}">
-        <img src="{% static '/img/logo64x64.png' %}" alt="ML" class="logo">
+        <img src="{% static '/img/logo64x64.png' %}" alt="AutoeMeL" class="logo">
         EMEL
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -32,10 +32,7 @@
             <a class="nav-link" href="{% url 'dataset:list' %}">Datasets</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'secret2' %}">Secret2</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'dataset:create' %}">Create</a>
+            <a class="nav-link" href="{% url 'dataset:create' %}">Nuevo</a>
           </li>
 
         </ul>

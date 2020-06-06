@@ -2,13 +2,20 @@
 
 
 {% block content %}
-<h2>Homepage</h2>
-<div class="col-5">
-    <p>Welcome to eMeL Site, {% if user.is_authenticated%}
-        {{ user.username }} {% else %}visitor{% endif %}!</p>
-    <p>
-        <strong>Total users registered: {{count}}</strong>
-    </p>
+
+<div class="jumbotron" style="width:70%; margin-left:15%;">
+    <h2>Bienvenido al sitio AutoeMel, {% if user.is_authenticated%}
+        <b>{{ user.username }}</b>{% else %}visitor{% endif %}!</h2>
+<br>
+<br>
+    <h1>Árboles de decisión para principiantes</h1>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <p>Total users registered: <span class="badge" style="background-color:powderblue;">{{count}}</span></p>
 
 </div>
 
