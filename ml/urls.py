@@ -6,7 +6,6 @@ from ml.core import views
 from ml.dataset import views as datasetviews
 
 
-
 urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
@@ -14,7 +13,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('secret/', views.secret, name='secret'),
     path('secret2/', views.SecretPage.as_view(), name="secret2"),
-    path('dataset/', include('ml.dataset.urls', namespace='datasets')),   
+    path('dataset/', include('ml.dataset.urls', namespace='datasets')),
 ]
 
 

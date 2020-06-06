@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+
+
+{% block content%}
+
+{% if valid %}
+<p> Ha sido imposible procesar su archivo.</p>
+{% else %}
+<div class="container">
+<h3>Detalles del Dataset: {{ nombre }}</h3>
+<div class=row>
+    <b class="col-md-2">Descripción:</b>
+    <p class="col-md-10">{{description}}</p>
+</div>
+<p><b>Tamaño del fichero: </b><span>{{ size }} bytes</span></p>
+{% if col_eliminada %}
+<p>Se ha considerado la columna <b>{{ col_eliminada }}</b> como indice de la tabla y ha sido eliminada.</p>
+{% endif %}
+<p><b>Numero de filas: </b><span>{{ rows }}.</span></p>
+<p><b>Numero de columnas: </b><span>{{ columns }}.</span></p>
+
+<p><b>Datos representativos:</b></p>
+{{data|safe}}}
+
+{% for atr in atributos %}
+<p>{{atr}}</p>
+{% endfor %}
+{{atributos}}
+
+
+</div>
+
+{% endif %}
+{% endblock %}

@@ -28,7 +28,7 @@
     <td> {{ dataset.description }} </td> 
     {% if dataset.archivo.url %}
     <td>
-        <a class="btn btn-info btn-sm" href="{{dataset.archivo.url}}">Descargar</a>
+        <a class="btn btn-info btn-sm" href="{% url 'dataset:detail' dataset.id %}">Descargar</a>
     </td>
     <td>
         <form action="{% url 'dataset:delete' dataset.id %}" method="POST">
