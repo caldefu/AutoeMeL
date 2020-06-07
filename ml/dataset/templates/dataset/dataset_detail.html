@@ -7,6 +7,7 @@
 {% else %}
 <div class="container">
   <h3>Detalles del Dataset: {{ nombre }}</h3>
+  <hr>
   <div class="row">
     <b class="col-md-2">Descripción:</b>
     <p class="col-md-10">{{description}}</p>
@@ -38,9 +39,7 @@
     <tr>
       {% for atr in atributos %}
       <td style="border-style: groove;">
-        <img
-          src="{% static 'cache/hist'|add:atr|add:'.png' %}"
-          alt=""/>
+        <img src="{% static 'cache/hist'|add:atr|add:'.png' %}" alt=""/>
       </td>
       {% endfor %}
     </tr>
@@ -64,6 +63,26 @@
 
   <p><b>Correlaciones:</b></p>
   <img src="{% static 'cache/corr.png' %}" alt="" style="width:80%;" />
+</div>
+<hr>
+<hr>
+<h3>El árbol ha sido creado con éxito</h3>
+<hr>
+<div class="row">
+  <div class="col-md-6">
+<p>Se han entrenado un total de <b>{{narboles}}</b> árboles, tardando un total de {{tiempo}} segundos.</p>
+<p>Para conseguir la mejor precisión del <b>{{ precision }}%</b> se han utilizado los siguientes parametros de la
+  función <i>DecisionTreeClasifier</i> de la librería <b><i>scikit-learn.</i></b></p>
+  <ul>
+    <li>Cálculo de la ganancia de información: <b>{{best_criterion}}</b>.</li>
+    <li>Splitter: <b>{{best_splitter}}</b>.</li>
+    <li>Máxima profundidad del árbol: <b>{{bext_max_depth}}</b>. </li>
+
+  </ul>
+</div>
+  <div class="col-md-6">
+  <img src="{% static 'cache/features_importances.png' %}" alt="" style="width:90%;" />
+</div>
 </div>
 {% endif %}
 
