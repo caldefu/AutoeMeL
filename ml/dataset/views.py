@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import Http404
 from django.contrib.auth import get_user_model
 from .tree import *
+import time
 
 User = get_user_model()
 
@@ -85,11 +86,14 @@ def detail(request, pk):
         histrograma(df[col],col, (int)(nfilas/10))
     histrograma(df[Y],Y, (int)(nfilas/10), 3, 3)
 
+    precision, best_criterion, best_max_depth, best_splitter, features_importances, narboles, arbol, tiempo_modelado = best_decision_tree(df,X,Y,ncolumnas)
+    
+    imagen_feature_importances (variables[0:-1],features_importances)
 
-    score=best_decision_tree(df,X,Y)
-
-
+    precision = round(precision*100, 2) 
+    tiempo_modelado = round(tiempo_modelado,3)
     ctx={'data':data,
+        'fecha':dataset.created_at,
         'description':dataset.description,
         'nombre':dataset.name,
         'size':file.size,
@@ -99,6 +103,12 @@ def detail(request, pk):
         'rows':nfilas,
         'columns':ncolumnas,
         'col_eliminada':col_eliminada,
+        'precision':precision,
+        'best_criterion':best_criterion,
+        'bext_max_depth':best_max_depth,
+        'tiempo':tiempo_modelado,
+        'narboles':narboles,
+        'best_splitter': best_splitter
         }
     return render(request,'dataset/dataset_detail.html',ctx)
 
