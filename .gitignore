@@ -1,6 +1,7 @@
 ml/media/
-ml/__pycache__
+ml/dataset/__pycache__
 settings.py
-ml/static/
+
+/static/
 
 
