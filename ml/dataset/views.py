@@ -7,8 +7,9 @@ from .models import Dataset
 from django.shortcuts import get_object_or_404, render
 from django.http import Http404
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from .tree import *
-import time
+from graphviz import pipe
 
 User = get_user_model()
 
@@ -56,7 +57,7 @@ class DeleteDataset (LoginRequiredMixin, DeleteView):
 
 
 
-
+@login_required
 def detail(request, pk):
     dataset =  get_object_or_404(Dataset, id=pk)
     file = dataset.archivo
@@ -73,6 +74,7 @@ def detail(request, pk):
         if columna in('ID','Id','id','iD','PK','Pk','Pk', 'pk'):
             df=df.drop([columna], axis=1)
             col_eliminada=columna
+    df=df.dropna()
 
     variables=df.columns.tolist()
     X=variables[0:-1]
@@ -92,6 +94,9 @@ def detail(request, pk):
 
     precision = round(precision*100, 2) 
     tiempo_modelado = round(tiempo_modelado,3)
+
+    dataset.arbol=arbol
+    dataset.save()
     ctx={'data':data,
         'fecha':dataset.created_at,
         'description':dataset.description,
@@ -112,4 +117,10 @@ def detail(request, pk):
         }
     return render(request,'dataset/dataset_detail.html',ctx)
 
-
+@login_required
+def arbol(request, pk):
+    dataset =  get_object_or_404(Dataset, id=pk)
+    arbol = pipe('dot','svg', dataset.arbol)
+    
+    ctx = {'name':dataset.name,'arbol':arbol}
+    return render(request,'dataset/dataset_arbol.html',ctx)

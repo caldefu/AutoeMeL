@@ -19,7 +19,7 @@
     <div class="container">
       <a class="navbar-brand" href="{% url 'home' %}">
         <img src="{% static '/img/logo64x64.png' %}" alt="AutoeMeL" class="logo">
-        EMEL
+        AutoeMeL
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,11 +29,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'dataset:list' %}">Datasets</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="{% url 'dataset:create' %}">Nuevo</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'dataset:list' %}">Datasets</a>
+          </li>
+
 
         </ul>
 

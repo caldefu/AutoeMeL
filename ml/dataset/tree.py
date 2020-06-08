@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
-from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.tree import DecisionTreeClassifier, plot_tree, export_graphviz
 import time
+import graphviz
+
 
 
 def histrograma(df,col, n, x=2, y=2):
@@ -49,7 +51,7 @@ def best_decision_tree(df, X,Y, max_profundidad_arbol=8):
     narboles=0
     for criterion in {"entropy", "gini"}:
         for splitter in {"best", "random"}:
-            for i in range (2,6):
+            for i in range (2,max_profundidad_arbol):
                 narboles += 1
                 tree = DecisionTreeClassifier (criterion=criterion, splitter=splitter, max_depth=i, random_state=73)
                 tree.fit(df[X],df[Y])              
@@ -61,10 +63,13 @@ def best_decision_tree(df, X,Y, max_profundidad_arbol=8):
                     best_max_depth=i
                     best_splitter=splitter
                     features_importance=tree.feature_importances_
-                    arbol=plot_tree(tree)
+                    arbol=export_graphviz(tree, out_file=None,
+                                feature_names=X,
+                               class_names=Y,
+                               filled=True, rounded=True,
+                               special_characters=True)               
     end = time.time()   
     tiempo_modelado = end-start            
-    print(best_score, best_criterion, best_max_depth, best_splitter, features_importance)
     return (best_score,
             best_criterion,
             best_max_depth,

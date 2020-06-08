@@ -2,49 +2,59 @@
 
 {% load crispy_forms_tags %}
 
-
-
 {% block content%}
 
-<h3>Datasets del usuario {{user.username}} </h3>
-<a class="btn btn-primary" href="{% url 'dataset:create' %}">Subir dataset</a>
+<h3>Listado de datasets</h3>
+<div class="container">
+<hr>
+        <table class="table">
+            <thead style="background-color:whitesmoke";">
 
-<table class="table">
-    <thead>
+                <tr>
+                    <td><b>Nombre</b></td>
+                    <td><b>Description</b></td>
+                    <td colspan="3"><b>Acciones</b></td>
+                </tr>
+            </thead>
+            <tbody>
 
-        <tr>
-            <td>Nombre</td>
-            <td>Description</td>
-            <td>Archivo</td>
-            <td></td>
+                {% for dataset in object_list %}
+                <tr>
+                    <td> {{ dataset.name }}</td>
+                    <td> {{ dataset.description_html|safe}} </td>
+                    {% if dataset.archivo.url %}
+                    <td>
+                        <a class="btn btn-info btn-sm" href="{% url 'dataset:detail' dataset.id %}">Crear árbol</a>
+                    </td>
+                    <td>
+                        {% if dataset.arbol %}
+                        <form action="{% url 'dataset:arbol' dataset.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-danger btn-sm" type="submit">Ver árbol</button>
 
-        </tr>
-    </thead>
-    <tbody>
+                        </form>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form action="{% url 'dataset:delete' dataset.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
 
-{% for dataset in object_list %}
-<tr>
-    <td> {{ dataset.name }}</td>
-    <td> {{ dataset.description }} </td> 
-    {% if dataset.archivo.url %}
-    <td>
-        <a class="btn btn-info btn-sm" href="{% url 'dataset:detail' dataset.id %}">Descargar</a>
-    </td>
-    <td>
-        <form action="{% url 'dataset:delete' dataset.id %}" method="POST">
-            {% csrf_token %}
-        <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
-
-    </form>
-    </td>
-    {% endif %}
-</tr>
-{% endfor %}
+                        </form>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+         
 
 
-    </tbody>
-</table>
-    
 
+
+            </tbody>
+        </table>
+    <hr>
+    <a style="margin-left: 85%;" class="btn btn-primary" href="{% url 'dataset:create' %}">Nuevo dataset</a>
+
+</div>
 
 {% endblock %}
