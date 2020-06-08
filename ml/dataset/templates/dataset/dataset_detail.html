@@ -9,9 +9,10 @@
   <hr>
   <div class="row">
     <b class="col-md-2">Descripción:</b>
-    <p class="col-md-10">{{description_html|safe}}</p>
+    <span class="col-md-10">{{description|safe}}</span>
   </div>
-
+  <p><b>Ultima modificación: </b><span>{{ fecha }}.</span></p>
+   <p>
   <p><b>Tamaño del fichero: </b><span>{{ size }} bytes</span></p>
   {% if col_eliminada %}
   <p>
@@ -47,10 +48,18 @@
   <b>Variable objetivo:</b>
   <table>
     <tr style="background-color: lightsteelblue;">
+      <th style="border-style:inset;">Clases</th>
       <th style="border-style:inset;">{{var_objetivo}}</th>
     </tr>
 
     <tr>
+      <td style="border-style: groove;">
+        <ul>
+        {% for clase in clases %}
+        <li>{{clase}}. </li>
+        {% endfor %}
+      </ul>
+      </td>
       <td style="border-style: groove;">
         <img
           src="{% static 'cache/hist'|add:var_objetivo|add:'.png' %}"
@@ -70,17 +79,22 @@
 <div class="row">
   <div class="col-md-6">
 <p>Se han entrenado un total de <b>{{narboles}}</b> árboles, tardando un total de {{tiempo}} segundos.</p>
-<p>Para conseguir la mejor precisión del <b>{{ precision }}%</b> se han utilizado los siguientes parametros de la
-  función <i>DecisionTreeClasifier</i> de la librería <b><i>scikit-learn.</i></b></p>
+<p>Durante la validación se ha conseguido una mejor precisión del <b>{{ precision }}%</b>. Se han utilizado los siguientes parametros de la
+  función <i>DecisionTreeClasifier</i> de la librería <a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html"><b><i>scikit-learn.</i></b></a></p>
   <ul>
     <li>Cálculo de la ganancia de información: <b>{{best_criterion}}</b>.</li>
     <li>Splitter: <b>{{best_splitter}}</b>.</li>
     <li>Máxima profundidad del árbol: <b>{{bext_max_depth}}</b>. </li>
-
+    <li>Peso asociado a las clases: <b>balanced</b>. </li>
+    {% if precision < 80 %}
+    <li style="color:brown">El modelo obtenido automáticamente tiene una precisión muy baja. Tendría que utilizar otros modelos fuera del alcance de esta aplicación. </li>
+    {% endif %}
+    <p></p>
+    <a class="btn btn-primary btn-lg" href="{% url 'dataset:arbol' pk %}">Ver árbol</a>
   </ul>
 </div>
   <div class="col-md-6">
-  <img src="{% static 'cache/features_importances.png' %}" alt="" style="width:90%;" />
+  <img src="{% static 'cache/features_importances.png' %}" alt="" style="width:95%;" />
 </div>
 </div>
 {% endif %}

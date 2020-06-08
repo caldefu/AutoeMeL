@@ -3,10 +3,9 @@
 {% block content %}
 
 <h2>Arbol de decision del dataset: {{name}}</h2>
+<a class="btn btn-primary" href="{% static 'cache/arbol.pdf' %}">PDF</a>
+<hr>
 
-<div class="container">
-<svg width="100" height="100"></svg>
-  {{arbol}}
-</svg>
-</div>
+<img src="{% static 'cache/arbol.svg' %}">
+
 {% endblock %}

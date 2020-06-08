@@ -5,7 +5,6 @@ import seaborn as sns
 from sklearn.model_selection import KFold
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier, plot_tree, export_graphviz
-import time
 import graphviz
 
 
@@ -45,15 +44,18 @@ def imagen_correlations(dataframe, show_chart = True):
 
 
 
-def best_decision_tree(df, X,Y, max_profundidad_arbol=8):
-    start = time.time()
+def best_decision_tree (df, X, Y, max_profundidad_arbol=8):
     best_score=-1
     narboles=0
     for criterion in {"entropy", "gini"}:
         for splitter in {"best", "random"}:
             for i in range (2,max_profundidad_arbol):
                 narboles += 1
-                tree = DecisionTreeClassifier (criterion=criterion, splitter=splitter, max_depth=i, random_state=73)
+                tree = DecisionTreeClassifier (criterion=criterion,
+                                                splitter=splitter,
+                                                max_depth=i,
+                                                random_state=73,
+                                                class_weight="balanced")
                 tree.fit(df[X],df[Y])              
                 cv= KFold (n_splits=10, shuffle=True, random_state=73)
                 score=np.mean(cross_val_score(tree,df[X],df[Y],scoring="accuracy",cv=cv,n_jobs=2))
@@ -65,17 +67,16 @@ def best_decision_tree(df, X,Y, max_profundidad_arbol=8):
                     features_importance=tree.feature_importances_
                     arbol=export_graphviz(tree, out_file=None,
                                 feature_names=X,
-                               class_names=Y,
-                               filled=True, rounded=True,
-                               special_characters=True)               
-    end = time.time()   
-    tiempo_modelado = end-start            
+                                filled=True,
+                                class_names=df[Y].unique().astype(str),
+                                rounded=True,
+                                special_characters=True)               
+              
     return (best_score,
             best_criterion,
             best_max_depth,
             best_splitter,
             features_importance,
             narboles,
-            arbol,
-            tiempo_modelado)
+            arbol)
             

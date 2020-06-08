@@ -9,7 +9,9 @@ from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from .tree import *
-from graphviz import pipe
+import time
+import graphviz
+
 
 User = get_user_model()
 
@@ -59,7 +61,10 @@ class DeleteDataset (LoginRequiredMixin, DeleteView):
 
 @login_required
 def detail(request, pk):
+    start = time.time()
+    
     dataset =  get_object_or_404(Dataset, id=pk)
+    fecha = dataset.created_at
     file = dataset.archivo
     if file.name.endswith('.csv'): 
         df=pd.read_csv(file)
@@ -83,25 +88,35 @@ def detail(request, pk):
     ncolumnas=df.shape[1]
     filamedia=(int)(nfilas/2)
     data=df.iloc[np.r_[0:5,filamedia:(filamedia+5),-5:0]].to_html
-    imagen_correlations(df)
+    try:
+        imagen_correlations(df)
+    except:
+        corre="nocorr"
     for col in variables:
         histrograma(df[col],col, (int)(nfilas/10))
     histrograma(df[Y],Y, (int)(nfilas/10), 3, 3)
-
-    precision, best_criterion, best_max_depth, best_splitter, features_importances, narboles, arbol, tiempo_modelado = best_decision_tree(df,X,Y,ncolumnas)
+    if ncolumnas>8:
+        max_depth=8
+    else:
+        max_depth=ncolumnas+1
+    
+    precision, best_criterion, best_max_depth,best_splitter,features_importances,narboles,arbol = best_decision_tree(df,X,Y, max_depth)
     
     imagen_feature_importances (variables[0:-1],features_importances)
 
     precision = round(precision*100, 2) 
-    tiempo_modelado = round(tiempo_modelado,3)
 
     dataset.arbol=arbol
     dataset.save()
+    end = time.time()
+    tiempo_modelado= round(end-start, 3)
     ctx={'data':data,
-        'fecha':dataset.created_at,
-        'description':dataset.description,
+        'fecha':fecha,
+        'description':dataset.description_html,
         'nombre':dataset.name,
+        'pk': dataset.id,
         'size':file.size,
+        'clases':df[Y].unique().astype(str),
         'download':dataset.archivo,
         'atributos':X,
         'var_objetivo':Y,
@@ -115,12 +130,15 @@ def detail(request, pk):
         'narboles':narboles,
         'best_splitter': best_splitter
         }
+    
     return render(request,'dataset/dataset_detail.html',ctx)
 
 @login_required
 def arbol(request, pk):
     dataset =  get_object_or_404(Dataset, id=pk)
-    arbol = pipe('dot','svg', dataset.arbol)
-    
+    arbol = graphviz.Source(dataset.arbol,format='svg')
+    arbol_pdf = graphviz.Source(dataset.arbol,format='pdf')
+    arbol.render("./static/cache/arbol")
+    arbol_pdf.render("./static/cache/arbol")
     ctx = {'name':dataset.name,'arbol':arbol}
     return render(request,'dataset/dataset_arbol.html',ctx)
