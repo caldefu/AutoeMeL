@@ -88,13 +88,14 @@ def detail(request, pk):
     ncolumnas=df.shape[1]
     filamedia=(int)(nfilas/2)
     data=df.iloc[np.r_[0:5,filamedia:(filamedia+5),-5:0]].to_html
-    try:
-        imagen_correlations(df)
-    except:
-        corre="nocorr"
+    imagen_correlations(df)
+    n= (int)(nfilas/10)
+    if n<5:
+        n=4
+        
     for col in variables:
-        histrograma(df[col],col, (int)(nfilas/10))
-    histrograma(df[Y],Y, (int)(nfilas/10), 3, 3)
+        histrograma(df[col],col,n)
+    histrograma(df[Y],Y, n, 3, 3)
     if ncolumnas>8:
         max_depth=8
     else:
