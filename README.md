@@ -5,6 +5,6 @@ Aplicativo web basado en *Django* que ejecuta algunas de las API de la librería
 
 *Este código forma parte del trabajo fin de grado del alumno: Manuel Rodríguez.*
 
-*Del grado en Ingeniería Informaática*
+*Del grado en Ingeniería Informática*
 
 ***Universidad Internacional de La Rioja***
