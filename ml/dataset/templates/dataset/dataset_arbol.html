@@ -2,10 +2,19 @@
 {% load static %}
 {% block content %}
 
+
+
+
 <h2>Arbol de decision del dataset: {{name}}</h2>
 <a class="btn btn-primary" href="{% static 'cache/arbol.pdf' %}">PDF</a>
 <hr>
 
-<img src="{% static 'cache/arbol.svg' %}">
+
+    <div class="container">
+              <img style="width: 100%;" src="{% static 'cache/arbol.svg' %}">
+    </div>
+
+
+
 
 {% endblock %}

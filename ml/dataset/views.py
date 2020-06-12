@@ -9,6 +9,7 @@ from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from .tree import *
+from .forms import CreateDatasetForm
 import time
 import graphviz
 
@@ -17,11 +18,13 @@ User = get_user_model()
 
 
 class CreateDataset (LoginRequiredMixin, CreateView):
+
+    form_class = CreateDatasetForm
     model = Dataset
-    fields = ("name", "description", "archivo")
     template_name = 'dataset/dataset_form.html'
     success_url = reverse_lazy('dataset:list')
-    
+
+ 
 
     def form_valid(self, form):
         self.object = form.save(commit=False)

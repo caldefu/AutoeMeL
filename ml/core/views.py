@@ -16,11 +16,4 @@ def home(request):
 class SignUp(CreateView):
     form_class = forms.UserCreateForm
     success_url = reverse_lazy('login')
-    template_name = 'registratdation/signup.html'
-
-@login_required
-def secret(request):
-    return render(request, 'secret.html')
-
-class SecretPage(LoginRequiredMixin, TemplateView):
-    template_name = 'secret2.html'
+    template_name = 'registration/signup.html'
