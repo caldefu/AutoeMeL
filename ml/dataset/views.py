@@ -39,7 +39,6 @@ class UserDataset (LoginRequiredMixin, ListView):
     def get_queryset(self):
         try:
             self.dataset_user = Dataset.objects.filter(user=self.request.user)
-           # self.dataset_user = User.objects.prefetch_related('datasets').get(username__iexact=self.kwargs.get('username'))
         except User.DoesNotExist :
             raise Http404
            
@@ -79,40 +78,59 @@ def detail(request, pk):
     col_eliminada=""
     #Eliminacion de las columna índice
     for columna in df.columns.tolist():
+        #Eliminacion de las filas con valores iguales a "?"
+        df=df.drop(df[df[columna]=="?"].index)
         if columna in('ID','Id','id','iD','PK','Pk','Pk', 'pk'):
             df=df.drop([columna], axis=1)
             col_eliminada=columna
+
+
+
+    #Eliminación de filas con valores vacíos.        
     df=df.dropna()
 
-    variables=df.columns.tolist()
-    X=variables[0:-1]
-    Y=variables[-1]
+    #Conversión de atributos categoricos a numéricos mediante variables dummies.
+    df,X,Y = categorias_to_dummy(df)
     nfilas=df.shape[0]
     ncolumnas=df.shape[1]
     filamedia=(int)(nfilas/2)
     data=df.iloc[np.r_[0:5,filamedia:(filamedia+5),-5:0]].to_html
+
+    
+    #Matriz de correlaciones      
     imagen_correlations(df)
+
+
+
+
+
+    #Histogramas atributos
     n= (int)(nfilas/10)
     if n<5:
         n=4
-        
-    for col in variables:
+    for col in X:
         histrograma(df[col],col,n)
-    histrograma(df[Y],Y, n, 3, 3)
+
+    #Histograma clases
+    clases=df[Y].unique().astype(str)
+    histrograma(df[Y],Y, len(clases), 3, 3)
+
+
     if ncolumnas>8:
         max_depth=8
     else:
         max_depth=ncolumnas+1
-    
+   
     precision, best_criterion, best_max_depth,best_splitter,features_importances,narboles,arbol = best_decision_tree(df,X,Y, max_depth)
     
-    imagen_feature_importances (variables[0:-1],features_importances)
-
+    
+    imagen_feature_importances (X,features_importances)
     precision = round(precision*100, 2) 
-
+    
     dataset.arbol=arbol
     dataset.save()
     end = time.time()
+    
     tiempo_modelado= round(end-start, 3)
     ctx={'data':data,
         'fecha':fecha,
@@ -120,7 +138,7 @@ def detail(request, pk):
         'nombre':dataset.name,
         'pk': dataset.id,
         'size':file.size,
-        'clases':df[Y].unique().astype(str),
+        'clases': clases,
         'download':dataset.archivo,
         'atributos':X,
         'var_objetivo':Y,

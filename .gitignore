@@ -9,4 +9,6 @@ ml/__pycache__/
 ml/settings.py
 ml/settings.py
 static/cache/
+static\cache/
+
 
