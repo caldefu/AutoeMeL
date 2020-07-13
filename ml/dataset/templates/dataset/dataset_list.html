@@ -30,7 +30,7 @@
                         {% if dataset.arbol %}
                         <form action="{% url 'dataset:arbol' dataset.id %}" method="POST">
                             {% csrf_token %}
-                            <button class="btn btn-danger btn-sm" type="submit">Ver árbol</button>
+                            <button class="btn btn-success btn-sm" type="submit">Ver árbol</button>
 
                         </form>
                         {% endif %}

@@ -13,7 +13,13 @@
     {{form|crispy}}
     <input type="submit" class='btn btn-primary btn-large' value="Crear">
 </form>
-    
+<h5>Indicaciones acerca del archivo</h5>
+<ul style="font-size: 10;">
+    <li>El archivo tiene que ser <i>csv</i>(valores separados por comas) o un xls(Excel).</li>
+    <li>El variable objetivo de clasificación tiene que estar en la última columna.</li>
+    <li>La columna de índices con nombres distintos de id o pk no es válida.</li>
+    <li>Los atributos categóricos sólo podrán utilizar símbolos "-" y "_".</li>
+</ul>    
 
 
 {% endblock %}
